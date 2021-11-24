@@ -1,0 +1,44 @@
+---
+
+name: molecule
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - ubuntu2004
+          - ubuntu1804
+          - ubuntu1604
+    steps:
+      - name: checkout the repository
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+
+      # TODO: does not work inside a docker container
+      # - name: run molecule
+      #   uses: robertdebock/molecule-action@2.6.1
+      #   env:
+      #     MOLECULE_DISTRO: ${{ matrix.distro }}
+
+  # deploy:
+  #   needs:
+  #     - test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: to Ansible Galaxy
+  #       if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.head_ref == 'main')
+  #       uses: robertdebock/galaxy-action@1.0.3
+  #       with:
+  #         galaxy_api_key: ${{ secrets.GALAXY_API_KEY }}

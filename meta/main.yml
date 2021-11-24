@@ -1,0 +1,23 @@
+---
+
+galaxy_info:
+  role_name: microk8s
+  author: Tibor Csóka
+  description: |
+    "Establish microk8s Kubernetes instance."
+  company: ""
+
+  license: MIT
+
+  min_ansible_version: 2.9
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+
+  galaxy_tags:
+    - microk8s
+    - kubernetes
+
+dependencies: []

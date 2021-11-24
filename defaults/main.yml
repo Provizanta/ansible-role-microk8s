@@ -1,0 +1,5 @@
+---
+
+microk8s_addons: []
+
+microk8s_channel: "latest/stable"

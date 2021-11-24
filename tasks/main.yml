@@ -1,0 +1,33 @@
+---
+
+- name: establish pre-requisites
+  become: true
+  package:
+    name:
+      - snapd
+    state: present
+
+- name: establish snap package
+  become: true
+  snap:
+    name: microk8s
+    state: present
+    classic: true
+    channel: "{{ microk8s_channel }}"
+
+- name: add user to control group
+  become: true
+  user:
+    name: "{{ ansible_env.USER | default(ansible_user_id) }}"
+    groups: microk8s
+    append: true
+
+- name: reload users | reset host connection
+  meta: reset_connection
+
+- name: enable addons
+  become: true
+  loop: "{{ microk8s_addons }}"
+  command: "microk8s enable {{ item }}"
+  register: _enable_addon
+  changed_when: "'already enabled' not in _enable_addon.stdout"

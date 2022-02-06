@@ -2,6 +2,7 @@
 
 galaxy_info:
   role_name: microk8s
+  namespace: provizanta
   author: Tibor Csóka
   description: |
     "Establish microk8s Kubernetes instance."

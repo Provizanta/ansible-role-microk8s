@@ -10,17 +10,13 @@ lint: |
   ansible-lint
 platforms:
   - name: instance
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2004}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
 provisioner:
-  log: true
   name: ansible
-  playbooks:
-    converge: ${MOLECULE_PLAYBOOK:-playbook.yml}
-    prepare: ${MOLECULE_PREPARE:-prepare.yml}
 verifier:
-  name: testinfra
+  name: ansible

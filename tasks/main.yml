@@ -25,6 +25,28 @@
 - name: reload users | reset host connection
   meta: reset_connection
 
+- name: config | hosts | dir
+  become: true
+  loop: "{{ microk8s_hosts | dict2items | map(attribute='key') }}"
+  file:
+    dest: /var/snap/microk8s/current/args/certs.d/{{ item }}
+    owner: root
+    group: microk8s
+    mode: "ug=rwx"
+    state: directory
+  notify: restart microk8s
+
+- name: config | hosts | setup
+  become: true
+  loop: "{{ microk8s_hosts | dict2items }}"
+  copy:
+    dest: /var/snap/microk8s/current/args/certs.d/{{ item.key }}/hosts.toml
+    content: "{{ item.value }}"
+    owner: root
+    group: microk8s
+    mode: "ug=rwx"
+  notify: restart microk8s
+
 - name: enable addons
   become: true
   loop: "{{ microk8s_addons }}"

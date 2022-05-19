@@ -7,7 +7,7 @@ about: Suggest an idea for this project
 
 ## Proposed feature
 
-Plese, descripe the requested feature.
+Please, describe the requested feature.
 
 ## Rationale
 

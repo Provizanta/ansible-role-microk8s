@@ -17,6 +17,8 @@ These variables are defined in [defaults/main.yml](./defaults/main.yml):
 
     microk8s_addons: []
 
+    microk8s_hosts: {}
+
     microk8s_channel: "latest/stable"
 
 
@@ -37,6 +39,13 @@ Example Playbook
               - dns
               - storage
             microk8s_channel: latest/stable
+            microk8s_hosts:
+              # add insecure registry at registry.example.com
+              registry.example.com: |
+                server = "http://registry.example.com"
+
+                [host."http://registry.example.com"]
+                capabilities = ["pull", "resolve"]
 
 License
 -------

@@ -47,6 +47,15 @@
     mode: "ug=rwx"
   notify: restart microk8s
 
+- name: config | component | args
+  become: true
+  loop: "{{ microk8s_extra_args | dict2items }}"
+  blockinfile:
+    path: /var/snap/microk8s/current/args/{{ item.key }}
+    block: "{{ item.value }}"
+    marker: "# extra args - {{ ansible_managed }}"
+  notify: restart microk8s
+
 - name: enable addons
   become: true
   loop: "{{ microk8s_addons }}"

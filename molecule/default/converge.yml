@@ -16,3 +16,6 @@
 
             [host."http://registry.example.com"]
             capabilities = ["pull", "resolve"]
+        microk8s_extra_args:
+          containerd: |
+            -l=debug

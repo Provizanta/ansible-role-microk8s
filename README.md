@@ -21,6 +21,7 @@ These variables are defined in [defaults/main.yml](./defaults/main.yml):
 
     microk8s_channel: "latest/stable"
 
+    microk8s_extra_args: {}     # key: file in /var/snap/microk8s/current/args/, value: extra content
 
 Dependencies
 ------------
@@ -46,6 +47,9 @@ Example Playbook
 
                 [host."http://registry.example.com"]
                 capabilities = ["pull", "resolve"]
+            microk8s_extra_args:
+              containerd: |
+                -l=debug
 
 License
 -------

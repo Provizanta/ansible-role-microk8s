@@ -53,7 +53,7 @@
   blockinfile:
     path: /var/snap/microk8s/current/args/{{ item.key }}
     block: "{{ item.value }}"
-    marker: "# extra args - {{ ansible_managed }}"
+    marker: "## extra args - managed by Ansible"
   notify: restart microk8s
 
 - name: enable addons

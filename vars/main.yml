@@ -1,1 +1,3 @@
 ---
+
+microk8s_drain_extra_args: "--ignore-daemonsets --delete-emptydir-data"

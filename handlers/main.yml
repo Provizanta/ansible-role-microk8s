@@ -1,7 +1,10 @@
 ---
 
-- name: restart microk8s
+- name: restart node
   loop:
     - stop
     - start
   command: "microk8s {{ item }}"
+
+- name: uncordon node
+  command: "microk8s kubectl uncordon {{ ansible_hostname }}"

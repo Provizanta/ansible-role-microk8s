@@ -23,6 +23,8 @@ These variables are defined in [defaults/main.yml](./defaults/main.yml):
 
     microk8s_extra_args: {}     # key: file in /var/snap/microk8s/current/args/, value: extra content
 
+    microk8s_drain_node_on_update: false
+
 Dependencies
 ------------
 
@@ -36,6 +38,7 @@ Example Playbook
       roles:
         - role: ansible-role-microk8s
           vars:
+            microk8s_drain_node_on_update: true
             microk8s_addons:
               - dns
               - storage

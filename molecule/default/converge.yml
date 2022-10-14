@@ -5,6 +5,7 @@
   roles:
     - role: ansible-role-microk8s
       vars:
+        microk8s_drain_node_on_update: true
         microk8s_addons:
           - dns
           - storage

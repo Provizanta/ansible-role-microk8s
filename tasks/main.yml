@@ -7,6 +7,20 @@
       - snapd
     state: present
 
+- name: node status
+  command: "microk8s status --format=yaml"
+  register: _node_status
+  changed_when: false
+  failed_when: false
+
+- name: drain nodes
+  when:
+    - microk8s_drain_node_on_update
+    - _node_status.rc == 0
+    - (_node_status.stdout | from_yaml)['microk8s']['running']
+  command: "microk8s kubectl drain {{ ansible_hostname }} {{ microk8s_drain_extra_args }}"
+  notify: uncordon node
+
 - name: establish snap package
   become: true
   snap:
@@ -34,7 +48,7 @@
     group: microk8s
     mode: "ug=rwx"
     state: directory
-  notify: restart microk8s
+  notify: restart node
 
 - name: config | hosts | setup
   become: true
@@ -45,7 +59,7 @@
     owner: root
     group: microk8s
     mode: "ug=rwx"
-  notify: restart microk8s
+  notify: restart node
 
 - name: config | component | args
   become: true
@@ -54,7 +68,7 @@
     path: /var/snap/microk8s/current/args/{{ item.key }}
     block: "{{ item.value }}"
     marker: "## {mark} extra args - managed by Ansible"
-  notify: restart microk8s
+  notify: restart node
 
 - name: enable addons
   become: true

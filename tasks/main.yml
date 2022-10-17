@@ -18,6 +18,8 @@
     - microk8s_drain_node_on_update
     - _node_status.rc == 0
     - (_node_status.stdout | from_yaml)['microk8s']['running']
+    - (_node_status.stdout | from_yaml)['high-availability']['enabled']
+    - ((_node_status.stdout | from_yaml)['high-availability']['nodes'] | length) > 2
   command: "microk8s kubectl drain {{ ansible_hostname }} {{ microk8s_drain_extra_args }}"
   notify: uncordon node
 

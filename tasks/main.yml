@@ -79,6 +79,6 @@
 
 - name: disable addons
   become: true
-  loop: "{{ (_node_status['addons'] | selectattr('status','==','enabled') | map(attribute='name') | list)
+  loop: "{{ ((_node_status.stdout | from_yaml)['addons'] | selectattr('status','==','enabled') | map(attribute='name') | list)
             | difference(microk8s_addons | map('split',':') | map('first') | list) }}"
   command: "microk8s disable {{ item }}"

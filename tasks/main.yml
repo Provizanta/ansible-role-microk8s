@@ -7,13 +7,13 @@
       - snapd
     state: present
 
-- name: node status
+- name: node | status
   command: "microk8s status --format=yaml"
   register: _node_status
   changed_when: false
   failed_when: false
 
-- name: drain nodes
+- name: node | drain
   when:
     - microk8s_drain_node_on_update
     - _node_status.rc == 0
@@ -23,7 +23,7 @@
   command: "microk8s kubectl drain {{ ansible_hostname }} {{ microk8s_drain_extra_args }}"
   notify: uncordon node
 
-- name: establish snap package
+- name: package | install
   become: true
   snap:
     name: microk8s
@@ -31,14 +31,22 @@
     classic: true
     channel: "{{ microk8s_channel }}"
 
-- name: add user to control group
+# TODO: workaround for https://github.com/ansible-collections/community.general/issues/1606
+- name: package | update
+  when: microk8s_update
+  become: true
+  command: "snap refresh microk8s --channel={{ microk8s_channel }}"
+  register: _snap_microk8s_refresh
+  changed_when: "'has no updates available' not in _snap_microk8s_refresh.stderr"
+
+- name: system | add user to control group
   become: true
   user:
     name: "{{ ansible_env.USER | default(ansible_user_id) }}"
     groups: microk8s
     append: true
 
-- name: reload users | reset host connection
+- name: system | reset host connection to reload users
   meta: reset_connection
 
 - name: config | hosts | dir
@@ -72,7 +80,7 @@
     marker: "## {mark} extra args - managed by Ansible"
   notify: restart node
 
-- name: enable addons
+- name: addons | enable
   become: true
   loop: "{{ microk8s_addons }}"
   command: "microk8s enable {{ item }}"

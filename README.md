@@ -23,6 +23,8 @@ These variables are defined in [defaults/main.yml](./defaults/main.yml):
 
     microk8s_extra_args: {}     # key: file in /var/snap/microk8s/current/args/, value: extra content
 
+    microk8s_update: true
+
     microk8s_drain_node_on_update: false
 
 Dependencies

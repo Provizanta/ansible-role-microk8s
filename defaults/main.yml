@@ -8,4 +8,6 @@ microk8s_channel: "latest/stable"
 
 microk8s_extra_args: {}
 
+microk8s_update: true
+
 microk8s_drain_node_on_update: false

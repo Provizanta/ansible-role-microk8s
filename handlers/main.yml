@@ -6,5 +6,8 @@
     - start
   command: "microk8s {{ item }}"
 
+- name: restart kubelite
+  command: systemctl restart snap.microk8s.daemon-kubelite.service
+
 - name: uncordon node
   command: "microk8s kubectl uncordon {{ ansible_hostname }}"

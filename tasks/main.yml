@@ -80,6 +80,16 @@
     marker: "## {mark} extra args - managed by Ansible"
   notify: restart node
 
+- name: config | component | auto update certificates
+  when: microk8s_auto_update_certs
+  become: true
+  blockinfile:
+    path: /var/snap/microk8s/current/args/kubelet
+    block: |
+      --rotate-certificates=true
+      --rotate-server-certificates=true
+  notify: restart kubelite
+
 - name: addons | enable
   become: true
   loop: "{{ microk8s_addons }}"

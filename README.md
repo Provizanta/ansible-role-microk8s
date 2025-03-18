@@ -27,7 +27,7 @@ These variables are defined in [defaults/main.yml](./defaults/main.yml):
 
     microk8s_drain_node_on_update: false
 
-    microk8s_auto_update_certs: false
+    microk8s_kubelet_additional_args: []
 
 Dependencies
 ------------

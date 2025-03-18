@@ -80,14 +80,12 @@
     marker: "## {mark} extra args - managed by Ansible"
   notify: restart node
 
-- name: config | component | auto update certificates
-  when: microk8s_auto_update_certs
+- name: config | component | kubelet args
   become: true
   blockinfile:
     path: /var/snap/microk8s/current/args/kubelet
     block: |
-      --rotate-certificates=true
-      --rotate-server-certificates=true
+      {{ microk8s_kubelet_additional_args | join('\n') }}
   notify: restart kubelite
 
 - name: addons | enable

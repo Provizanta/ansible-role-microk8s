@@ -88,3 +88,10 @@
   command: "microk8s enable {{ item }}"
   register: _enable_addon
   changed_when: "'already enabled' not in _enable_addon.stdout"
+
+# TODO: breaking change, is it necessary?
+# - name: disable addons
+#   become: true
+#   loop: "{{ ((_node_status.stdout | from_yaml)['addons'] | selectattr('status','==','enabled') | map(attribute='name') | list)
+#             | difference(microk8s_addons | map('split',':') | map('first') | list) }}"
+#   command: "microk8s disable {{ item }}"

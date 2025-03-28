@@ -1,7 +1,7 @@
 ---
 - name: config | component | kubelet args | check bkp
   become: true
-  stat:
+  ansible.builtin.stat:
     path: /var/snap/microk8s/current/args/kubelet.orig
   register: kubelet_orig_file
 
@@ -14,20 +14,16 @@
   when: not kubelet_orig_file.stat.exists
   notify: restart kubelite
 
-- name: config | component | kubelet args | restore orig config
-  become: true
-  ansible.builtin.copy:
+- name: config | component | kubelet args | slurp orig config
+  ansible.builtin.slurp:
     src: /var/snap/microk8s/current/args/kubelet.orig
-    dest: /var/snap/microk8s/current/args/kubelet
-    remote_src: yes
-  when: kubelet_orig_file.stat.exists
-  notify: restart kubelite
+  register: kubelet_orig_file_content
 
-- name: config | component | kubelet args | append args
+- name: config | component | kubelet args | assemble args
   become: true
-  loop: "{{ microk8s_kubelet_additional_args }}"
-  lineinfile:
-    path: /var/snap/microk8s/current/args/kubelet
-    line: "{{ item }}"
-    state: present
-  notify: restart kubelite
+  ansible.builtin.template:
+    src: kubelet_args.j2
+    dest: /var/snap/microk8s/current/args/kubelet
+    owner: root
+    group: microk8s
+    mode: '0660'

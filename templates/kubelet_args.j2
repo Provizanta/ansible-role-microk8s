@@ -1,4 +1,4 @@
-{{ kubelet_orig_file_content }}
+{{ kubelet_orig_file_content.content | b64decode }}
 {%- for item in microk8s_kubelet_additional_args | default([]) %}
 {{ item }}
 {%- endfor %}

@@ -80,6 +80,8 @@
     marker: "## {mark} extra args - managed by Ansible"
   notify: restart node
 
+- include_tasks: kubelet_args.yml
+
 - name: addons | enable
   become: true
   loop: "{{ microk8s_addons }}"

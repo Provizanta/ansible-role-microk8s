@@ -27,6 +27,10 @@ These variables are defined in [defaults/main.yml](./defaults/main.yml):
 
     microk8s_drain_node_on_update: false
 
+    # kubelet uses pflag to process arguments
+    # its behavior is to use the last value of a repeated flag
+    microk8s_kubelet_additional_args: []
+
 Dependencies
 ------------
 
@@ -55,6 +59,9 @@ Example Playbook
             microk8s_extra_args:
               containerd: |
                 -l=debug
+            microk8s_kubelet_additional_args:
+              - --rotate-certificates=true
+              - --rotate-server-certificates=true
 
 License
 -------

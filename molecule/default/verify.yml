@@ -1,0 +1,23 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Verify kubelet backup file exists
+      stat:
+        path: /var/snap/microk8s/current/args/kubelet.orig
+      register: backup_file
+      failed_when: not backup_file.stat.exists
+
+    - name: Get kubelet configuration content
+      command: cat /var/snap/microk8s/current/args/kubelet
+      register: kubelet_config
+      changed_when: false
+
+    - name: Verify kubelet args were added
+      assert:
+        that:
+          - "item in kubelet_config.stdout"
+        fail_msg: "Expected argument '{{ item }}' not found in kubelet configuration"
+        success_msg: "Argument '{{ item }}' correctly added to kubelet configuration"
+      loop: "{{ microk8s_kubelet_additional_args }}"

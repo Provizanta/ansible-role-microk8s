@@ -6,5 +6,11 @@
     - start
   command: "microk8s {{ item }}"
 
+- name: restart kubelet
+  become: true
+  ansible.builtin.systemd_service:
+    name: snap.microk8s.daemon-kubelite
+    state: restarted
+
 - name: uncordon node
   command: "microk8s kubectl uncordon {{ ansible_hostname }}"

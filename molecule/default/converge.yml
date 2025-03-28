@@ -20,3 +20,6 @@
         microk8s_extra_args:
           containerd: |
             -l=debug
+        microk8s_kubelet_additional_args:
+          - --rotate-certificates=true
+          - --rotate-server-certificates=true

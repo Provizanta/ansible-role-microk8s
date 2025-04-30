@@ -6,7 +6,7 @@
     - start
   command: "microk8s {{ item }}"
 
-- name: restart kubelet
+- name: restart kubelite
   become: true
   ansible.builtin.systemd_service:
     name: snap.microk8s.daemon-kubelite

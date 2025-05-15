@@ -12,7 +12,6 @@
     dest: /var/snap/microk8s/current/args/kubelet.orig
     remote_src: yes
   when: not kubelet_orig_file.stat.exists
-  notify: restart kubelite
 
 - name: config | component | kubelet args | slurp orig config
   ansible.builtin.slurp:
@@ -27,3 +26,4 @@
     owner: root
     group: microk8s
     mode: '0660'
+  notify: restart kubelite
